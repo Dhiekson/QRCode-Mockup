@@ -1,5 +1,3 @@
-import { removeBackground } from "@imgly/background-removal";
-
 (() => {
   // =========================================================
   // Constantes e helpers de elementos
@@ -133,6 +131,23 @@ import { removeBackground } from "@imgly/background-removal";
   // =========================================================
   // Utilitários
   // =========================================================
+  // Import dinâmico/lazy da remoção de fundo: se o bundle não estiver
+  // disponível (ex.: deploy sem os assets do vendor), o editor continua
+  // funcionando — o erro só aparece ao tentar usar a funcionalidade.
+  let _removeBackgroundFn = null;
+  async function getRemoveBackground() {
+    if (_removeBackgroundFn) return _removeBackgroundFn;
+    try {
+      const mod = await import("@imgly/background-removal");
+      _removeBackgroundFn = mod.removeBackground;
+      return _removeBackgroundFn;
+    } catch (err) {
+      throw new Error(
+        "Não foi possível carregar o módulo de remoção de fundo (/vendor/imgly). Verifique o deploy."
+      );
+    }
+  }
+
   function setStatus(msg, kind = "") {
     status.textContent = msg || "";
     status.className = "status" + (kind ? " is-" + kind : "");
@@ -1354,6 +1369,7 @@ function selected() {
         rmCb.disabled = true;
         setStatus("Removendo fundo…", "loading");
         try {
+          const removeBackground = await getRemoveBackground();
           const outBlob = await removeBackground(l._srcFile, {
             progress: (k, cur, tot) => {
               if (cur && tot) setStatus(`Removendo fundo… ${Math.round((cur / tot) * 100)}%`, "loading");
