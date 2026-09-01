@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editor de Mockup de Smartphone</title>
+  <link rel="stylesheet" href="mockup.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&family=Montserrat:wght@400;700;800&family=Roboto:wght@400;700;900&family=Open+Sans:wght@400;700;800&family=Lato:wght@400;700;900&family=Inter:wght@400;700;900&family=Oswald:wght@400;600;700&family=Raleway:wght@400;700;900&family=Playfair+Display:wght@400;700;900&family=Merriweather:wght@400;700;900&family=Bebas+Neue&family=Nunito:wght@400;700;900&family=Quicksand:wght@400;700&family=Rubik:wght@400;700;900&family=Lobster&family=Pacifico&family=Dancing+Script:wght@400;700&family=Righteous&family=Anton&family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <script type="importmap">
+    {
+      "imports": {
+        "@imgly/background-removal": "/vendor/imgly/dist/index.mjs",
+        "onnxruntime-web": "/vendor/onnx/ort.all.min.mjs"
+      }
+    }
+  </script>
+</head>
+<body>
+  <nav class="topnav">
+    <a class="topnav__brand" href="index.html">Geradores</a>
+    <div class="topnav__links">
+      <a href="index.html">QR Code</a>
+      <a href="mockup.html" class="is-active">Mockup Smartphone</a>
+    </div>
+  </nav>
+
+  <main class="app">
+    <header class="app__header">
+      <h1>Editor de <span>Mockup</span></h1>
+      <p class="app__subtitle">
+        Monte propagandas com vários dispositivos, textos, formas, brilhos e fundos personalizados.
+      </p>
+    </header>
+
+    <section class="app__body">
+      <!-- Coluna esquerda: camadas + upload -->
+      <aside class="panel left">
+        <div class="controls__section">
+          <h2>Imagem principal</h2>
+          <label class="drop" id="drop">
+            <input type="file" id="file" accept="image/*" hidden />
+            <span class="drop__icon">⬆️</span>
+            <span class="drop__text">Clique ou arraste a tela do celular</span>
+          </label>
+        </div>
+
+        <div class="controls__section">
+          <h2>Adicionar camada</h2>
+          <div class="add-row">
+            <button class="btn btn--small btn--ghost" id="btn-add-phone">📱 Telefone</button>
+            <button class="btn btn--small btn--ghost" id="btn-add-text">🅣 Texto</button>
+            <button class="btn btn--small btn--ghost" id="btn-add-shape">● Forma</button>
+            <div id="shape-picker" class="shape-picker" hidden></div>
+            <button class="btn btn--small btn--ghost" id="btn-add-image">🖼 Imagem</button>
+          </div>
+        </div>
+
+        <div class="controls__section">
+          <h2>Fundo (atrás do mockup)</h2>
+          <div class="field">
+            <label for="frame-preset">Tamanho do quadro (estender fundo)</label>
+            <select id="frame-preset">
+              <option value="640x1280">Story 9:16 — 640×1280</option>
+              <option value="1080x1920">Story HD 9:16 — 1080×1920</option>
+              <option value="1080x1080">Post quadrado 1:1 — 1080×1080</option>
+              <option value="864x1080">Feed 4:5 — 864×1080</option>
+              <option value="1280x720">Widescreen 16:9 — 1280×720</option>
+              <option value="custom">Personalizado</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="field__row">
+              <input id="frame-w" type="number" min="200" max="2400" step="10" value="640" title="Largura (px)" aria-label="Largura do quadro" />
+              <span style="align-self:center;color:var(--text-muted)">×</span>
+              <input id="frame-h" type="number" min="200" max="2400" step="10" value="1280" title="Altura (px)" aria-label="Altura do quadro" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Imagem</label>
+            <div class="field__row">
+              <button class="btn btn--small btn--ghost" id="btn-bg-image">⬆ Imagem</button>
+              <button class="btn btn--small btn--ghost" id="btn-bg-image-clear" title="remover">✕</button>
+            </div>
+            <input type="file" id="bg-image-file" accept="image/*" hidden />
+          </div>
+          <div class="field" id="bg-image-edit" hidden>
+            <label>Ajustes da imagem de fundo</label>
+            <div class="field__row">
+              <button class="btn btn--small btn--ghost" id="btn-bg-edit-reset" title="Restaurar padrões">↺ Reset</button>
+            </div>
+            <label for="bg-img-zoom">Zoom</label>
+            <input type="range" id="bg-img-zoom" min="1" max="3" step="0.01" value="1" />
+            <label for="bg-img-panx">Posição X</label>
+            <input type="range" id="bg-img-panx" min="-400" max="400" step="1" value="0" />
+            <label for="bg-img-pany">Posição Y</label>
+            <input type="range" id="bg-img-pany" min="-600" max="600" step="1" value="0" />
+            <label for="bg-img-opacity">Opacidade</label>
+            <input type="range" id="bg-img-opacity" min="0.05" max="1" step="0.01" value="1" />
+            <label for="bg-img-blur">Desfoque</label>
+            <input type="range" id="bg-img-blur" min="0" max="30" step="0.5" value="0" />
+            <label for="bg-img-fit">Ajuste</label>
+            <select id="bg-img-fit">
+              <option value="cover">Cobrir (cover)</option>
+              <option value="contain">Conter (contain)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="bg-type">Tipo</label>
+            <select id="bg-type">
+              <option value="gradient">Gradiente</option>
+              <option value="solid">Cor sólida</option>
+              <option value="transparent">Transparente</option>
+              <option value="image">Imagem</option>
+            </select>
+          </div>
+          <div class="field" id="bg-solid-wrap">
+            <label for="bg-color">Cores</label>
+            <div class="field__row">
+              <input id="bg-color" type="color" value="#111827" />
+              <input id="bg-color2" type="color" value="#1e3a8a" />
+            </div>
+          </div>
+          <div class="field" id="bg-grad-wrap">
+            <label for="bg-grad-preset">Estilo do gradiente</label>
+            <select id="bg-grad-preset">
+              <option value="default">Reto — azul</option>
+              <option value="sunset">Pôr do sol</option>
+              <option value="ocean">Oceano</option>
+              <option value="candy">Candy</option>
+              <option value="neon">Neon</option>
+              <option value="gold">Dourado</option>
+              <option value="radial">Radial roxo</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="controls__section">
+          <h2>Camadas</h2>
+          <div class="layer-list" id="layer-list"></div>
+          <p class="status" id="status" role="status"></p>
+        </div>
+      </aside>
+
+      <!-- Palco central -->
+      <section class="panel stage">
+        <div class="stage__canvas-wrap">
+          <canvas id="stage"></canvas>
+        </div>
+        <p class="stage__hint" id="hint">
+          Duplo clique no telefone para editar a imagem direto no mockup (arraste para mover, rolinha para zoom). Clique para selecionar camadas.
+        </p>
+      </section>
+
+      <!-- Coluna direita: propriedades -->
+      <aside class="panel right">
+        <div class="controls__section">
+          <h2>Propriedades</h2>
+          <div id="props" class="props">
+            <p class="props__placeholder">Selecione uma camada na lista ou na tela para editar.</p>
+          </div>
+        </div>
+        <div class="controls__section">
+          <button class="btn btn--accent" id="btn-download">⬇ Baixar mockup (PNG)</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script type="module" src="mockup.js"></script>
+</body>
+</html>

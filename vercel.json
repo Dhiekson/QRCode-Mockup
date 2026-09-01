@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node",
+      "config": { "includeFiles": "node_modules/@imgly/**, node_modules/onnxruntime-web/**" }
+    }
+  ],
+  "routes": [{ "src": "/(.*)", "dest": "/server.js" }]
+}

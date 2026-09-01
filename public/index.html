@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerador de QR Code</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="topnav">
+    <a class="topnav__brand" href="index.html">Geradores</a>
+    <div class="topnav__links">
+      <a href="index.html" class="is-active">QR Code</a>
+      <a href="mockup.html">Mockup Smartphone</a>
+    </div>
+  </nav>
+
+  <main class="app">
+    <header class="app__header">
+      <h1>Gerador de <span>QR Code</span></h1>
+      <p class="app__subtitle">Crie QR Codes personalizados em segundos.</p>
+    </header>
+
+    <section class="app__body">
+      <!-- Formulário -->
+      <form id="qr-form" class="form" novalidate>
+        <div class="form__group">
+          <label for="text">Conteúdo do QR Code</label>
+          <textarea
+            id="text"
+            name="text"
+            rows="3"
+            placeholder="Digite um texto, URL, e-mail, Wi-Fi, telefone, etc."
+            required
+          ></textarea>
+          <small class="form__hint">
+            Ex.: https://exemplo.com • WIFI:T:WPA;S:MinhaRede;P:senha;; • MATMSG:TO:email@x.com;SUB:assunto;BODY:msg;;
+          </small>
+        </div>
+
+        <div class="form__row">
+          <div class="form__group">
+            <label for="size">Tamanho (px)</label>
+            <input id="size" name="size" type="number" min="128" max="2048" value="512" />
+          </div>
+
+          <div class="form__group">
+            <label for="errorCorrection">Correção de erro</label>
+            <select id="errorCorrection" name="errorCorrection">
+              <option value="L">L (7%)</option>
+              <option value="M" selected>M (15%)</option>
+              <option value="Q">Q (25%)</option>
+              <option value="H">H (30%)</option>
+            </select>
+          </div>
+
+          <div class="form__group">
+            <label for="format">Formato</label>
+            <select id="format" name="format">
+              <option value="png" selected>PNG</option>
+              <option value="svg">SVG</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form__row">
+          <div class="form__group form__group--color">
+            <label for="dark">Cor do módulo</label>
+            <input id="dark" name="color.dark" type="color" value="#000000" />
+          </div>
+          <div class="form__group form__group--color">
+            <label for="light">Cor do fundo</label>
+            <input id="light" name="color.light" type="color" value="#ffffff" />
+          </div>
+        </div>
+        <div class="form__group">
+          <label class="form__checkbox">
+            <input id="transparent" type="checkbox" />
+            <span>Fundo transparente (PNG/SVG)</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn--primary">Gerar QR Code</button>
+      </form>
+
+      <!-- Resultado -->
+      <section class="result" id="result" hidden>
+        <div class="result__box">
+          <img id="result-image" alt="QR Code gerado" />
+        </div>
+        <div class="result__actions">
+          <button class="btn btn--ghost" id="btn-download">⬇ Download</button>
+          <button class="btn btn--ghost" id="btn-copy">📋 Copiar imagem</button>
+        </div>
+        <small class="result__status" id="result-status"></small>
+      </section>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

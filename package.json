@@ -1,0 +1,28 @@
+{
+  "name": "geradorqr",
+  "version": "1.0.0",
+  "description": "Gerador de QR Code com servidor local (Node.js + Express + qrcode)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:e2e": "node e2e-test.js"
+  },
+  "keywords": [
+    "qrcode",
+    "qr",
+    "generator",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@imgly/background-removal": "^1.7.0",
+    "express": "^5.2.1",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.9.0"
+  }
+}
